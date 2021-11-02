@@ -48,7 +48,7 @@ public class FirebaseController {
     }
 
     /**
-     * Returns the paths for all collections stored in Firestore
+     * Returns the path for all collections stored in Firestore
      */
     @GetMapping("/getAllPaths")
     public Set<String> getAllPaths() {

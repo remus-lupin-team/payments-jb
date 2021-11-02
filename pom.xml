@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.bootcamp</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>payments</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Java Bootcamp project</description>
+    <name>payments</name>
+    <description>Java Bootcamp Payments Project</description>
 
     <properties>
         <java.version>11</java.version>
