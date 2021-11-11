@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        //trying to catch the error from the Card constructor
+        try {
+            SpringApplication.run(DemoApplication.class, args);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        //SpringApplication.run(DemoApplication.class, args);
     }
-
 }
