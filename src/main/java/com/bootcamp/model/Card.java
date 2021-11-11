@@ -10,6 +10,19 @@ public class Card {
     private int expirationYear;
     private int expirationMonth;
 
+    public Card(String holderName, String cardNumber, String CVV, int expirationYear, int expirationMonth) throws Exception {
+        if (isValidCardNumber(cardNumber) && isValidCVV(CVV) &&
+                isValidExpiration(expirationYear, expirationMonth) && isValidHolderName(holderName)){
+            this.holderName = holderName;
+            this.cardNumber = cardNumber;
+            this.CVV = CVV;
+            this.expirationYear = expirationYear;
+            this.expirationMonth = expirationMonth;
+        } else {
+            throw new Exception("Incorrect card fields. Please try again.");
+        }
+    }
+
     private Boolean isValidExpiration(int year, int month){
         int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);

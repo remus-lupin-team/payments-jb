@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Card</title>
+
+</head>
+<body>
+<div>
+    <h2 >Enter Card details</h2>
+    <form th:action="@{/saveCard}" method="post">
+
+        <input type="text" id="cardNumber" name="cardNumber" placeholder="Card number" required/>
+        <input type="text" id="holderName" name="holderName" placeholder="Holder name" required/>
+        <input type="text" id="cvv" name="cvv" placeholder="CVV" required/>
+        <input type="text" id="expirationYear" name="expirationYear" placeholder="Expiration year" required/>
+        <input type="text" id="expirationMonth" name="expirationMonth" placeholder="Expiration month" required/>
+
+        <input id="submit" type="submit"  value="Save card"/>
+    </form>
+<!--    <p th:if="${saveCardError}" class="error">Wrong input data</p>-->
+</div>
+</body>
+</html>
