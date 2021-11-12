@@ -21,6 +21,7 @@
         <input id="submit" type="submit"  value="Save card"/>
     </form>
     <p th:if="${cardError}" class="error">Wrong input data</p>
+    <p th:if="${cardSaved}">Card added successfully</p>
 </div>
 </body>
 </html>
