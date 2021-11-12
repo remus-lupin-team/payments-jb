@@ -1,4 +1,4 @@
-package com.bootcamp.model;
+package com.bootcamp.demo.model;
 
 import java.util.Calendar;
 
