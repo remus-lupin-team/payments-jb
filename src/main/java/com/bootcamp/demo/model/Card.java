@@ -1,16 +1,21 @@
 package com.bootcamp.demo.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Calendar;
 
-public class Card extends Throwable{
+@Data
+@NoArgsConstructor
+public class Card{
     private String holderName;
     private String cardNumber;
     private String CVV;
 
-    private int expirationYear;
-    private int expirationMonth;
+    private Long expirationYear;
+    private Long expirationMonth;
 
-    public Card(String holderName, String cardNumber, String CVV, int expirationYear, int expirationMonth) throws Exception {
+    public Card(String holderName, String cardNumber, String CVV, Long expirationYear, Long expirationMonth) throws Exception {
 
         if (isValidCardNumber(cardNumber) && isValidCVV(CVV) &&
                 isValidExpiration(expirationYear, expirationMonth) && isValidHolderName(holderName)){
@@ -29,7 +34,7 @@ public class Card extends Throwable{
         }
     }
 
-    private Boolean isValidExpiration(int year, int month){
+    private Boolean isValidExpiration(Long year, Long month){
         int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
 
@@ -78,26 +83,6 @@ public class Card extends Throwable{
         }
 
         return true;
-    }
-
-    public String getHolderName() {
-        return holderName;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public String getCVV() {
-        return CVV;
-    }
-
-    public int getExpirationYear() {
-        return expirationYear;
-    }
-
-    public int getExpirationMonth() {
-        return expirationMonth;
     }
 
     @Override
