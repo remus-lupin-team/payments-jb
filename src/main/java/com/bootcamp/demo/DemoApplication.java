@@ -1,5 +1,6 @@
 package com.bootcamp.demo;
 
+import com.bootcamp.demo.model.Transaction;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

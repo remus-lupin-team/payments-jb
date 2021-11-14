@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +46,11 @@ public class FirebaseController {
         FirebaseApp.initializeApp(options);
 
         firestoreDB = FirestoreClient.getFirestore();
+    }
+
+    @Bean
+    public Firestore getFirestore(){
+        return this.firestoreDB;
     }
 
     /**
