@@ -1,12 +1,6 @@
 package com.bootcamp.demo.model;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Calendar;
 
-@Data
-@NoArgsConstructor
 public class Card{
     private String holderName;
     private String cardNumber;
@@ -14,6 +8,9 @@ public class Card{
 
     private Long expirationYear;
     private Long expirationMonth;
+
+    public Card() {
+    }
 
     public Card(String holderName, String cardNumber, String CVV, Long expirationYear, Long expirationMonth) throws Exception {
 
@@ -83,6 +80,46 @@ public class Card{
         }
 
         return true;
+    }
+
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public String getCVV() {
+        return CVV;
+    }
+
+    public Long getExpirationYear() {
+        return expirationYear;
+    }
+
+    public Long getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    public void setHolderName(String holderName) {
+        this.holderName = holderName;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setCVV(String CVV) {
+        this.CVV = CVV;
+    }
+
+    public void setExpirationYear(Long expirationYear) {
+        this.expirationYear = expirationYear;
+    }
+
+    public void setExpirationMonth(Long expirationMonth) {
+        this.expirationMonth = expirationMonth;
     }
 
     @Override
