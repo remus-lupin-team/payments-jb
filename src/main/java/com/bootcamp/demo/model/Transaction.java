@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public class Transaction {
     private String id;
     private String cardNumber;
-    private double amount;
+    private Double amount;
     private LocalDateTime timestamp;
 }
