@@ -1,5 +1,6 @@
 package com.bootcamp.demo.dao;
 
+import com.bootcamp.demo.model.Card;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import static java.lang.System.getProperty;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -36,5 +38,10 @@ public class FirestoreDaoImpl implements FirestoreDao{
     @Override
     public void remove(String id, String collectionName) {
         firestoreDB.collection(collectionName).document(id).delete();
+    }
+
+    @Override
+    public void update(String id, String collectionName, Map cardDetails) {
+        firestoreDB.collection(collectionName).document(id).set(cardDetails);
     }
 }

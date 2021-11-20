@@ -1,9 +1,12 @@
 package com.bootcamp.demo.controller;
 
+import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.service.CardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -20,5 +23,11 @@ public class CardController {
     ResponseEntity<String> removeCard(@PathVariable String id){
       this.cardService.removeCard(id);
       return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
+    }
+
+    @PutMapping(path="{id}")
+    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Map cardDetails){
+        this.cardService.updateCard(id, cardDetails);
+        return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
     }
 }
