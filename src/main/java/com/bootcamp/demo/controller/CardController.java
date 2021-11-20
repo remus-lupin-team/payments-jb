@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -30,5 +32,11 @@ public class CardController {
     @GetMapping("/getAllCards")
     public List<Card> getAllCards(){
          return cardService.getAll();
+    }
+
+    @PutMapping(path="{id}")
+    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Map cardDetails){
+        this.cardService.updateCard(id, cardDetails);
+        return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
     }
 }

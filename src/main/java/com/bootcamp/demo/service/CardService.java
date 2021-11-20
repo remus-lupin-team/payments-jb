@@ -4,6 +4,8 @@ import com.bootcamp.demo.dao.FirestoreDao;
 import com.bootcamp.demo.model.Card;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 import java.util.List;
 
 
@@ -20,5 +22,8 @@ public class CardService {
 
     public List<Card> getAll() {
         return firestoreDao.getAll();
+    }
+    public void updateCard(String id, Map updateDetails){
+        this.firestoreDao.update(id,"cards", updateDetails);
     }
 }
