@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Transaction {
     private String id;
+    private String userId;
     private String cardNumber;
     private double amount;
     private LocalDateTime timestamp;
+
 }
