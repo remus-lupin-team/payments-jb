@@ -1,7 +1,6 @@
 package com.bootcamp.demo.controller;
 
 import com.bootcamp.model.Card;
-
 import java.util.Calendar;
 
 public class CardValidation {
