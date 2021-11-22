@@ -1,13 +1,9 @@
 package com.bootcamp.demo.model;
 
-import lombok.Getter;
-
-@Getter
 public class Card {
     private String holderName;
     private String cardNumber;
     private String CVV;
-
     private Long expirationYear;
     private Long expirationMonth;
 
