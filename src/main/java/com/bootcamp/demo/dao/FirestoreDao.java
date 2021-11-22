@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface FirestoreDao {
     void remove(String id, String collectionName);
+
     void update(String id, String collectionName, Map updateDetails);
 
     List<Card> getAll();
@@ -18,4 +19,6 @@ public interface FirestoreDao {
     Card setPreferredCard(String cardNumber);
 
     List<Transaction> getAllTransactions();
+
+    Transaction addTransaction(Transaction transaction);
 }

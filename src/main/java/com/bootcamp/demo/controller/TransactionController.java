@@ -44,4 +44,8 @@ public class TransactionController {
         return transactionService.filterByDate(startDate, endDate);
     }
 
+    @GetMapping("/details")
+    public List<Transaction> getTransactionDetails() {
+        return transactionService.getTransactionDetails();
+    }
 }

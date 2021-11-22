@@ -156,4 +156,15 @@ public class FirestoreDaoImpl implements FirestoreDao {
         }
         return objects;
     }
+
+    @Override
+    public Transaction addTransaction(Transaction transaction) {
+        Map<String, Object> transactionsData = new HashMap<>();
+        transactionsData.put("cardNumber", transaction.getCardNumber());
+        transactionsData.put("amount", transaction.getAmount());
+        transactionsData.put("timestamp", transaction.getTimestamp());
+
+        ApiFuture<WriteResult> document = firestoreDB.collection("transactions").document().set(transactionsData);
+        return transaction;
+    }
 }
