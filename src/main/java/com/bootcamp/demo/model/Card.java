@@ -8,6 +8,7 @@ import java.util.Calendar;
 @Data
 @NoArgsConstructor
 public class Card{
+    private String userId;
     private String holderName;
     private String cardNumber;
     private String CVV;
@@ -15,10 +16,11 @@ public class Card{
     private Long expirationYear;
     private Long expirationMonth;
 
-    public Card(String holderName, String cardNumber, String CVV, Long expirationYear, Long expirationMonth) throws Exception {
+    public Card(String userId, String holderName, String cardNumber, String CVV, Long expirationYear, Long expirationMonth) throws Exception {
 
         if (isValidCardNumber(cardNumber) && isValidCVV(CVV) &&
                 isValidExpiration(expirationYear, expirationMonth) && isValidHolderName(holderName)){
+            this.userId = userId;
             this.holderName = holderName;
             this.cardNumber = cardNumber;
             this.CVV = CVV;

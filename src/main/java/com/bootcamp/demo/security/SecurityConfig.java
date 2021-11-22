@@ -12,7 +12,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
+        http.httpBasic().and()
                 .authorizeRequests()
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("/actuator/health").permitAll()
@@ -24,7 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and()
+                .csrf()
+                .disable();
     }
 
     @Override
