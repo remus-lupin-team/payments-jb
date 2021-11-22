@@ -1,13 +1,9 @@
 package com.bootcamp.demo.model;
 
-import lombok.Getter;
-
-@Getter
 public class Card {
     private String holderName;
     private String cardNumber;
     private String CVV;
-
     private int expirationYear;
     private int expirationMonth;
 
@@ -17,5 +13,25 @@ public class Card {
         CVV = cvv;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
+    }
+
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public String getCVV() {
+        return CVV;
+    }
+
+    public int getExpirationYear() {
+        return expirationYear;
+    }
+
+    public int getExpirationMonth() {
+        return expirationMonth;
     }
 }
