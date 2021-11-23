@@ -27,7 +27,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Repository
 public class FirestoreDaoImpl implements FirestoreDao{
     private Firestore firestoreDB;
-    DocumentToCardMapper mapper;
+    private final DocumentToCardMapper mapper;
 
     @Autowired
     public FirestoreDaoImpl(DocumentToCardMapper mapper) {

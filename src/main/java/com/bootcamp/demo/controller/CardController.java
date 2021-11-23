@@ -2,35 +2,32 @@ package com.bootcamp.demo.controller;
 
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.service.CardService;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
-import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/card")
+@RequestMapping(value = "/card", produces = APPLICATION_JSON_VALUE)
 public class CardController {
-    private Firestore firestoreDB;
-    private CardService cardService;
+    private final CardService cardService;
 
     @Autowired
     public CardController(CardService cardService) {
         this.cardService = cardService;
     }
 
-    @DeleteMapping(value = "/{cardNumber}")
-    public String removeCard(@PathVariable String cardNumber){
-        this.firestoreDB = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> writeResult = firestoreDB.collection("cards").document(cardNumber).delete();
-        return "Successfully deleted " + cardNumber;
+    @DeleteMapping(path="{id}")
+    ResponseEntity<String> removeCard(@PathVariable String id){
+        this.cardService.removeCard(id);
+        return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
     }
 
     @GetMapping("/getAllCards")
-    @ResponseBody
     public List<Card> getAllCards(){
          return cardService.getAll();
     }
