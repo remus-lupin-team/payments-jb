@@ -19,12 +19,12 @@ public class CardController {
     }
 
     @DeleteMapping(path="{id}")
-    ResponseEntity<String> removeCard(@PathVariable String id){
+   public ResponseEntity<String> removeCard(@PathVariable String id){
       this.cardService.removeCard(id);
       return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
     }
 
-    @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
+  public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Map cardDetails){
         this.cardService.updateCard(id, cardDetails);
         return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
