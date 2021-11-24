@@ -24,11 +24,22 @@ public class CardController {
     @DeleteMapping(path="{id}")
     ResponseEntity<String> removeCard(@PathVariable String id){
         this.cardService.removeCard(id);
-        return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @GetMapping("/getAllCards")
     public List<Card> getAllCards(){
          return cardService.getAll();
+    }
+
+    @PostMapping("/addCard")
+    ResponseEntity<Object> addCard(@RequestBody Card card){
+        cardService.addCard(card);
+        return new ResponseEntity<>(card, HttpStatus.OK);
+    }
+
+    @PutMapping("/preferredCard")
+    ResponseEntity<Object> setPreferredCard(@RequestParam String cardNumber){
+        return new ResponseEntity<>(cardService.setPreferredCard(cardNumber), HttpStatus.OK);
     }
 }

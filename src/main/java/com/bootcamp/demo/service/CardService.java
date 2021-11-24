@@ -21,4 +21,12 @@ public class CardService {
     public List<Card> getAll() {
         return firestoreDao.getAll();
     }
+
+    public void addCard(Card card){
+        firestoreDao.addCard(card);
+    }
+
+    public Card setPreferredCard(String cardNumber) {
+        return firestoreDao.setPreferredCard(cardNumber);
+    }
 }
