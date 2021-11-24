@@ -52,6 +52,11 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
+    public void update(String id, String collectionName, Map cardDetails) {
+        firestoreDB.collection(collectionName).document(id).set(cardDetails);
+    }
+
+    @Override
     public List<Card> getAll() {
         ApiFuture<QuerySnapshot> query = firestoreDB.collection(CARDS).get();
         List<Card> cards = new ArrayList<>();

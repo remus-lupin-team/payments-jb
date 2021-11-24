@@ -34,4 +34,12 @@ public class CardService {
         updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
         this.firestoreDao.update(id,"cards", updateDetails);
     }
+
+    public Card setPreferredCard(String cardNumber) {
+        return firestoreDao.setPreferredCard(cardNumber);
+    }
+
+    public void addCard(Card card) {
+        firestoreDao.addCard(card);
+    }
 }
