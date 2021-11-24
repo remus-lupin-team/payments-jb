@@ -4,6 +4,7 @@ import com.bootcamp.demo.dao.FirestoreDao;
 import com.bootcamp.demo.model.Card;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import java.util.List;
@@ -23,7 +24,14 @@ public class CardService {
     public List<Card> getAll() {
         return firestoreDao.getAll();
     }
-    public void updateCard(String id, Map updateDetails){
+
+    public void updateCard(String id, Card cardDetails){
+        Map updateDetails = new HashMap();
+        updateDetails.put("cardNumber", cardDetails.getCardNumber());
+        updateDetails.put("holderName", cardDetails.getHolderName());
+        updateDetails.put("cvv", cardDetails.getCVV());
+        updateDetails.put("expirationYear", cardDetails.getExpirationYear());
+        updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
         this.firestoreDao.update(id,"cards", updateDetails);
     }
 }

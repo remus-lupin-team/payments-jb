@@ -37,13 +37,7 @@ public class CardController {
 
   public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails){
-        Map updateDetails = new HashMap();
-        updateDetails.put("cardNumber", cardDetails.getCardNumber());
-        updateDetails.put("holderName", cardDetails.getHolderName());
-        updateDetails.put("cvv", cardDetails.getCVV());
-        updateDetails.put("expirationYear", cardDetails.getExpirationYear());
-        updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
-        this.cardService.updateCard(id, updateDetails);
+        this.cardService.updateCard(id, cardDetails);
         return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
     }
 }
