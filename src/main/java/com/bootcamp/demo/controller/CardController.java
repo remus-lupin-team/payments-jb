@@ -27,7 +27,7 @@ public class CardController {
     @DeleteMapping(path="{id}")
    public ResponseEntity<String> removeCard(@PathVariable String id){
       this.cardService.removeCard(id);
-      return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
+      return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @GetMapping("/getAllCards")
@@ -38,6 +38,17 @@ public class CardController {
   public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails){
         this.cardService.updateCard(id, cardDetails);
-        return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping("/addCard")
+    ResponseEntity<Object> addCard(@RequestBody Card card){
+        cardService.addCard(card);
+        return new ResponseEntity<>(card, HttpStatus.OK);
+    }
+
+    @PutMapping("/preferredCard")
+    ResponseEntity<Object> setPreferredCard(@RequestParam String cardNumber){
+        return new ResponseEntity<>(cardService.setPreferredCard(cardNumber), HttpStatus.OK);
     }
 }

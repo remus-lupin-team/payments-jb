@@ -1,9 +1,12 @@
 package com.bootcamp.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Card {
     private String holderName;
     private String cardNumber;
     private String CVV;
+    private CardStateEnum state;
     private Long expirationYear;
     private Long expirationMonth;
 
@@ -39,6 +42,15 @@ public class Card {
 
     public void setCVV(String CVV) {
         this.CVV = CVV;
+    }
+
+    @JsonIgnore
+    public CardStateEnum getState() {
+        return state;
+    }
+
+    public void setState(CardStateEnum state) {
+        this.state = state;
     }
 
     public Long getExpirationYear() {
