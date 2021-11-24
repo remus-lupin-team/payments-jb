@@ -42,4 +42,12 @@ public class CardService {
     public Card setPreferredCard(String cardNumber) {
         return firestoreDao.setPreferredCard(cardNumber);
     }
+
+    public void addCard(Card card){
+        firestoreDao.addCard(card);
+    }
+
+    public Card setPreferredCard(String cardNumber) {
+        return firestoreDao.setPreferredCard(cardNumber);
+    }
 }
