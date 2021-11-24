@@ -1,10 +1,12 @@
 package com.bootcamp.demo.controller;
 
+import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.service.CardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -25,8 +27,14 @@ public class CardController {
     }
 
   public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Map cardDetails){
-        this.cardService.updateCard(id, cardDetails);
+    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails){
+        Map updateDetails = new HashMap();
+        updateDetails.put("cardNumber", cardDetails.getCardNumber());
+        updateDetails.put("holderName", cardDetails.getHolderName());
+        updateDetails.put("cvv", cardDetails.getCVV());
+        updateDetails.put("expirationYear", cardDetails.getExpirationYear());
+        updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
+        this.cardService.updateCard(id, updateDetails);
         return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
     }
 }
