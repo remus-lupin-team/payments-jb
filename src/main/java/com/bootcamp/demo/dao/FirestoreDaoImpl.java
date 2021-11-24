@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -50,6 +51,11 @@ public class FirestoreDaoImpl implements FirestoreDao{
     @Override
     public void remove(String id, String collectionName) {
         firestoreDB.collection(collectionName).document(id).delete();
+    }
+
+    @Override
+    public void update(String id, String collectionName, Map cardDetails) {
+        firestoreDB.collection(collectionName).document(id).set(cardDetails);
     }
 
     @Override

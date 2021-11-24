@@ -4,7 +4,6 @@ public class Card {
     private String holderName;
     private String cardNumber;
     private String CVV;
-
     private Long expirationYear;
     private Long expirationMonth;
 

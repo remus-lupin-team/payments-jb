@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,13 +25,19 @@ public class CardController {
     }
 
     @DeleteMapping(path="{id}")
-    ResponseEntity<String> removeCard(@PathVariable String id){
-        this.cardService.removeCard(id);
-        return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
+   public ResponseEntity<String> removeCard(@PathVariable String id){
+      this.cardService.removeCard(id);
+      return new ResponseEntity<>("Successfully deleted card "+ id, HttpStatus.OK);
     }
 
     @GetMapping("/getAllCards")
     public List<Card> getAllCards(){
          return cardService.getAll();
+    }
+
+  public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
+    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails){
+        this.cardService.updateCard(id, cardDetails);
+        return new ResponseEntity<>("Successfully updated card "+ id, HttpStatus.OK);
     }
 }
