@@ -1,7 +1,9 @@
 package com.bootcamp.demo.dao;
 
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
+import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Card;
+import com.bootcamp.demo.model.Transaction;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -26,13 +28,15 @@ import static java.lang.System.getProperty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Repository
-public class FirestoreDaoImpl implements FirestoreDao{
+public class FirestoreDaoImpl implements FirestoreDao {
     private Firestore firestoreDB;
-    private final DocumentToCardMapper mapper;
+    private final DocumentToCardMapper mapperToCard;
+    private final DocumentToTransactionMapper mapperToTransaction;
 
     @Autowired
-    public FirestoreDaoImpl(DocumentToCardMapper mapper) {
-        this.mapper = mapper;
+    public FirestoreDaoImpl(DocumentToCardMapper mapperToCard, DocumentToTransactionMapper mapperToTransaction) {
+        this.mapperToCard = mapperToCard;
+        this.mapperToTransaction = mapperToTransaction;
     }
 
     @PostConstruct
@@ -43,7 +47,8 @@ public class FirestoreDaoImpl implements FirestoreDao{
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();
-        FirebaseApp.initializeApp(options);
+        if (FirebaseApp.getApps().size() == 0)
+            FirebaseApp.initializeApp(options);
 
         firestoreDB = FirestoreClient.getFirestore();
     }
@@ -66,12 +71,30 @@ public class FirestoreDaoImpl implements FirestoreDao{
             QuerySnapshot querySnapshot = query.get();
             List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
             for (QueryDocumentSnapshot document : documents) {
-                Card card = mapper.mapDocument2Card(document);
+                Card card = mapperToCard.mapDocument2Card(document);
                 cards.add(card);
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return cards;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() {
+        ApiFuture<QuerySnapshot> query = firestoreDB.collection("transactions").get();
+        List<Transaction> objects = new ArrayList<Transaction>();
+        try {
+            QuerySnapshot querySnapshot = query.get();
+            List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+            for (QueryDocumentSnapshot document : documents) {
+                Transaction obj = mapperToTransaction.mapDocument2Transaction(document);
+                objects.add(obj);
+
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return objects;
     }
 }

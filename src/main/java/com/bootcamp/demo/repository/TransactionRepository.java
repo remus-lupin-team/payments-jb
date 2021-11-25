@@ -1,5 +1,6 @@
 package com.bootcamp.demo.repository;
 
+import com.bootcamp.demo.dao.FirestoreDao;
 import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Transaction;
 import com.google.api.core.ApiFuture;
@@ -7,6 +8,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -19,35 +21,45 @@ import java.util.stream.Collectors;
 @Repository
 public class TransactionRepository {
     List<Transaction> list;
-    private Firestore firestore;
+    //    private Firestore firestore;
     DocumentToTransactionMapper mapper;
+    private final FirestoreDao firestoreDao;
 
-    public TransactionRepository(List<Transaction> list, Firestore firestore, DocumentToTransactionMapper mapper) {
+    public TransactionRepository(List<Transaction> list, FirestoreDao firestoreDao, DocumentToTransactionMapper mapper) {
         this.list = list;
-        this.firestore = firestore;
+        this.firestoreDao = firestoreDao;
         this.mapper = mapper;
-        
+
     }
 
-    public List<Transaction> getAll(){
+    @Autowired
+    public TransactionRepository(DocumentToTransactionMapper mapper, FirestoreDao firestoreDao) {
+        this.mapper = mapper;
+        this.firestoreDao = firestoreDao;
+        list = new ArrayList<Transaction>();
+        getFromDB();
+    }
+
+    public List<Transaction> getAll() {
         return list;
     }
 
-    public void getFromDB(){
-        firestore = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> query = firestore.collection("transactions").get();
-        List<Transaction> transactions = new ArrayList<>();
-        try{
-            QuerySnapshot querySnapshot= query.get();
-            List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-            for(QueryDocumentSnapshot document : documents){
-                Transaction transaction = mapper.mapDocument2Transaction(document);
-                transactions.add(transaction);
-            }
-        }catch (InterruptedException | ExecutionException e){
-            e.printStackTrace();
-        }
-        list = transactions;
+    public void getFromDB() {
+        list = firestoreDao.getAllTransactions();
+//        firestore = FirestoreClient.getFirestore();
+//        ApiFuture<QuerySnapshot> query = firestore.collection("transactions").get();
+//        List<Transaction> transactions = new ArrayList<>();
+//        try{
+//            QuerySnapshot querySnapshot= query.get();
+//            List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+//            for(QueryDocumentSnapshot document : documents){
+//                Transaction transaction = mapper.mapDocument2Transaction(document);
+//                transactions.add(transaction);
+//            }
+//        }catch (InterruptedException | ExecutionException e){
+//            e.printStackTrace();
+//        }
+//        list = transactions;
     }
 
     public List<Transaction> filterByAmount(Double minAmount, Double maxAmount){
