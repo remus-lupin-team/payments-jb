@@ -1,6 +1,7 @@
 package com.bootcamp.demo.mapper;
 
 import com.bootcamp.demo.model.Card;
+import com.bootcamp.demo.model.CardStateEnum;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,11 @@ public class DocumentToCardMapper {
 
         String CVV = document.getString("CVV");
         card.setCVV(CVV);
+
+        String state = document.getString("state");
+        card.setState(state.equals("PREFERRED")
+                 ? CardStateEnum.PREFERRED
+                 : CardStateEnum.NONE);
 
         Long expirationYear = document.getLong("expirationYear");
         card.setExpirationYear(expirationYear);

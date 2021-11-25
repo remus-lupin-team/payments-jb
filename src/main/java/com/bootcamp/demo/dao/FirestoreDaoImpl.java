@@ -2,14 +2,15 @@ package com.bootcamp.demo.dao;
 
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
 import com.bootcamp.demo.model.Card;
+import com.bootcamp.demo.model.CardStateEnum;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,18 +18,18 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.System.getProperty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Repository
-public class FirestoreDaoImpl implements FirestoreDao{
+public class FirestoreDaoImpl implements FirestoreDao {
+    public static final String CARDS_COLLECTION = "cards";
     private Firestore firestoreDB;
     private final DocumentToCardMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FirestoreDaoImpl.class);
 
     @Autowired
     public FirestoreDaoImpl(DocumentToCardMapper mapper) {
@@ -59,8 +60,8 @@ public class FirestoreDaoImpl implements FirestoreDao{
     }
 
     @Override
-    public List<Card> getAll(){
-        ApiFuture<QuerySnapshot> query = firestoreDB.collection("cards").get();
+    public List<Card> getAll() {
+        ApiFuture<QuerySnapshot> query = firestoreDB.collection(CARDS_COLLECTION).get();
         List<Card> cards = new ArrayList<>();
         try {
             QuerySnapshot querySnapshot = query.get();
@@ -70,8 +71,65 @@ public class FirestoreDaoImpl implements FirestoreDao{
                 cards.add(card);
             }
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to add a card", e);
         }
         return cards;
+    }
+
+    @Override
+    public Card addCard(Card card) {
+        ApiFuture<QuerySnapshot> findAllQuery = firestoreDB.collection(CARDS_COLLECTION).get();
+        Card cardToReturn = new Card();
+        try {
+            Map<String, Object> cardData = new HashMap<>();
+            cardData.put("cardNumber", card.getCardNumber());
+            cardData.put("holderName", card.getHolderName());
+            cardData.put("CVV", card.getCVV());
+            cardData.put("state", findAllQuery.get().getDocuments().isEmpty()
+                    ? CardStateEnum.PREFERRED
+                    : CardStateEnum.NONE);
+            cardData.put("expirationYear", card.getExpirationYear());
+            cardData.put("expirationMonth", card.getExpirationMonth());
+
+            cardToReturn = card;
+            cardToReturn.setState(findAllQuery.get().getDocuments().isEmpty()
+                    ? CardStateEnum.PREFERRED
+                    : CardStateEnum.NONE);
+
+            ApiFuture<WriteResult> document = firestoreDB.collection(CARDS_COLLECTION).document().set(cardData);
+
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to add a card", e);
+        }
+        return cardToReturn;
+    }
+
+    @Override
+    public Card setPreferredCard(String cardNumber) {
+        CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
+        Query stateQuery = ref.whereEqualTo("state", CardStateEnum.PREFERRED);
+        ApiFuture<QuerySnapshot> stateQuerySnapshot = stateQuery.get();
+
+        Query cardNumberQuery = ref.whereEqualTo("cardNumber", cardNumber);
+        ApiFuture<QuerySnapshot> cardNumberSnapshot = cardNumberQuery.get();
+
+        Card card = new Card();
+        try {
+            //do this only if the card that wants to be set exists
+            if (!cardNumberSnapshot.get().getDocuments().isEmpty()) {
+                //set any pre-existing preferred card to Not preferred
+                for (DocumentSnapshot document : stateQuerySnapshot.get().getDocuments()) {
+                    firestoreDB.collection(CARDS_COLLECTION).document(document.getId()).update("state", CardStateEnum.NONE);
+                }
+                //set preferred to the selected card
+                QueryDocumentSnapshot document = cardNumberSnapshot.get().getDocuments().get(0);
+                firestoreDB.collection(CARDS_COLLECTION).document(document.getId()).update("state", CardStateEnum.PREFERRED);
+                card = mapper.mapDocument2Card(document);
+                card.setState(CardStateEnum.PREFERRED);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to add a card", e);
+        }
+        return card;
     }
 }

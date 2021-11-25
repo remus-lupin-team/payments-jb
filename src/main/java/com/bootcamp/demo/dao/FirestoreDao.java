@@ -11,4 +11,8 @@ public interface FirestoreDao {
     void update(String id, String collectionName, Map updateDetails);
 
     List<Card> getAll();
+
+    Card addCard(Card card);
+
+    Card setPreferredCard(String cardNumber);
 }

@@ -4,6 +4,7 @@ public class Card {
     private String holderName;
     private String cardNumber;
     private String CVV;
+    private CardStateEnum state;
     private Long expirationYear;
     private Long expirationMonth;
 
@@ -39,6 +40,14 @@ public class Card {
 
     public void setCVV(String CVV) {
         this.CVV = CVV;
+    }
+
+    public CardStateEnum getState() {
+        return state;
+    }
+
+    public void setState(CardStateEnum state) {
+        this.state = state;
     }
 
     public Long getExpirationYear() {
