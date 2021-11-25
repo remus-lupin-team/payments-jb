@@ -3,6 +3,7 @@ package com.bootcamp.demo.dao;
 import java.util.Map;
 
 import com.bootcamp.demo.model.Card;
+import com.bootcamp.demo.model.Transaction;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface FirestoreDao {
     Card addCard(Card card);
 
     Card setPreferredCard(String cardNumber);
+
+    List<Transaction> getAllTransactions();
 }

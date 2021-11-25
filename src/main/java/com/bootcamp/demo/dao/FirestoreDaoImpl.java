@@ -1,8 +1,10 @@
 package com.bootcamp.demo.dao;
 
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
+import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.model.CardStateEnum;
+import com.bootcamp.demo.model.Transaction;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
@@ -12,6 +14,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -24,16 +27,19 @@ import java.util.concurrent.ExecutionException;
 import static java.lang.System.getProperty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@ConditionalOnProperty("firebaseKey")
 @Repository
 public class FirestoreDaoImpl implements FirestoreDao {
     public static final String CARDS_COLLECTION = "cards";
     private Firestore firestoreDB;
-    private final DocumentToCardMapper mapper;
+    private final DocumentToCardMapper mapperToCard;
+    private final DocumentToTransactionMapper mapperToTransaction;
     private static final Logger LOGGER = LoggerFactory.getLogger(FirestoreDaoImpl.class);
 
     @Autowired
-    public FirestoreDaoImpl(DocumentToCardMapper mapper) {
-        this.mapper = mapper;
+    public FirestoreDaoImpl(DocumentToCardMapper mapperToCard, DocumentToTransactionMapper mapperToTransaction) {
+        this.mapperToCard = mapperToCard;
+        this.mapperToTransaction = mapperToTransaction;
     }
 
     @PostConstruct
@@ -67,7 +73,7 @@ public class FirestoreDaoImpl implements FirestoreDao {
             QuerySnapshot querySnapshot = query.get();
             List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
             for (QueryDocumentSnapshot document : documents) {
-                Card card = mapper.mapDocument2Card(document);
+                Card card = mapperToCard.mapDocument2Card(document);
                 cards.add(card);
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -124,12 +130,30 @@ public class FirestoreDaoImpl implements FirestoreDao {
                 //set preferred to the selected card
                 QueryDocumentSnapshot document = cardNumberSnapshot.get().getDocuments().get(0);
                 firestoreDB.collection(CARDS_COLLECTION).document(document.getId()).update("state", CardStateEnum.PREFERRED);
-                card = mapper.mapDocument2Card(document);
+                card = mapperToCard.mapDocument2Card(document);
                 card.setState(CardStateEnum.PREFERRED);
             }
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.error("Failed to add a card", e);
         }
         return card;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() {
+        ApiFuture<QuerySnapshot> query = firestoreDB.collection("transactions").get();
+        List<Transaction> objects = new ArrayList<Transaction>();
+        try {
+            QuerySnapshot querySnapshot = query.get();
+            List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+            for (QueryDocumentSnapshot document : documents) {
+                Transaction obj = mapperToTransaction.mapDocument2Transaction(document);
+                objects.add(obj);
+
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return objects;
     }
 }

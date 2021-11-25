@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction history</title>
+</head>
+<body>
+
+<h1>Transaction History</h1>
+<ul id="transactionsList"></ul>
+
+<script>
+    let transactionsList = document.getElementById("transactionsList");
+    let transactionsFromResponse;
+
+    async function fetchData() {
+        await fetch("/history/all", {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(response => transactionsFromResponse = response)
+
+        transactionsFromResponse.forEach(transaction => {
+            let li = document.createElement("li");
+            li.innerText = 'id: ' + transaction.id +
+                '   \n\tcard number: ' + transaction.cardNumber +
+                '   \n\tamount: ' + transaction.amount +
+                '   \n\ttime stamp: ' + transaction.timeStamp;
+            transactionsList.append(li);
+        })
+    }
+
+    async function filterByAmount() {
+        await fetch("/history/amount", {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(response => transactionsFromResponse = response)
+
+        transactionsFromResponse.forEach(transaction => {
+            let li = document.createElement("li");
+            li.innerText = transaction.id + ' '
+                + transaction.cardNumber + ' '
+                + transaction.amount + ' '
+                + transaction.timeStamp;
+            transactionsList.append(li);
+        })
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchData);
+</script>
+
+</body>
+</html>
