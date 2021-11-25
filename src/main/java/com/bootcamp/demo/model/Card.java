@@ -1,7 +1,5 @@
 package com.bootcamp.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Card {
     private String holderName;
     private String cardNumber;
@@ -44,7 +42,6 @@ public class Card {
         this.CVV = CVV;
     }
 
-    @JsonIgnore
     public CardStateEnum getState() {
         return state;
     }

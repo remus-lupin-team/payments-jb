@@ -39,7 +39,7 @@ public class CardService {
         return firestoreDao.setPreferredCard(cardNumber);
     }
 
-    public void addCard(Card card) {
-        firestoreDao.addCard(card);
+    public Card addCard(Card card) {
+       return firestoreDao.addCard(card);
     }
 }

@@ -40,8 +40,7 @@ public class CardController {
 
     @PostMapping("/addCard")
     ResponseEntity<Object> addCard(@RequestBody Card card){
-        cardService.addCard(card);
-        return new ResponseEntity<>(card, HttpStatus.OK);
+        return new ResponseEntity<>(cardService.addCard(card), HttpStatus.OK);
     }
 
     @PutMapping("/preferredCard")

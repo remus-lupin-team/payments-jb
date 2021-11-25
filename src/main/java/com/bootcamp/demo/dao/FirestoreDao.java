@@ -12,7 +12,7 @@ public interface FirestoreDao {
 
     List<Card> getAll();
 
-    void addCard(Card card);
+    Card addCard(Card card);
 
     Card setPreferredCard(String cardNumber);
 }
