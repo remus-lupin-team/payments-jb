@@ -10,17 +10,18 @@
 <body>
 <div>
     <h2 >Enter Card details</h2>
-    <form th:action="@{/card}" method="post">
+    <form th:action="@{/card/addCard}" method="post">
 
         <input type="text" path="cardNumber" name="cardNumber" placeholder="Card number" required/>
         <input type="text" path="holderName" name="holderName" placeholder="Holder name" required/>
-        <input type="text" path="CVV" name="CVV" placeholder="CVV" required/>
+        <input type="text" path="cvv" name="cvv" placeholder="CVV" required/>
         <input type="text" path="expirationYear" name="expirationYear" placeholder="Expiration year" required/>
         <input type="text" path="expirationMonth" name="expirationMonth" placeholder="Expiration month" required/>
 
         <input id="submit" type="submit"  value="Save card"/>
     </form>
-    <p th:if="${cardError}">Wrong input data</p>
+    <p th:if="${cardError}" class="error">Wrong input data</p>
+    <p th:if="${cardSaved}">Card added successfully</p>
 </div>
 </body>
 </html>
