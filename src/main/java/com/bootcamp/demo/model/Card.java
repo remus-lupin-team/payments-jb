@@ -65,4 +65,16 @@ public class Card {
     public void setExpirationMonth(Long expirationMonth) {
         this.expirationMonth = expirationMonth;
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "holderName='" + holderName + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", cvv='" + CVV + '\'' +
+                ", state=" + state +
+                ", expirationYear=" + expirationYear +
+                ", expirationMonth=" + expirationMonth +
+                '}';
+    }
 }
