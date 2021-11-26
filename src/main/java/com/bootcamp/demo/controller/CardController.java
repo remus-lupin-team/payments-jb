@@ -15,10 +15,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/card", produces = APPLICATION_JSON_VALUE)
 public class CardController {
     private final CardService cardService;
+    private final CardValidation cardValidation;
 
     @Autowired
-    public CardController(CardService cardService) {
+    public CardController(CardService cardService, CardValidation cardValidation) {
         this.cardService = cardService;
+        this.cardValidation=cardValidation;
     }
 
     @DeleteMapping(path="{id}")
@@ -40,7 +42,11 @@ public class CardController {
 
     @PostMapping("/addCard")
     ResponseEntity<Object> addCard(@RequestBody Card card){
-        return new ResponseEntity<>(cardService.addCard(card), HttpStatus.OK);
+        if (cardValidation.isValidCard(card)){
+            return new ResponseEntity<>(cardService.addCard(card), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/preferredCard")

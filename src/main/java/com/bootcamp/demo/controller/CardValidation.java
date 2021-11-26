@@ -1,8 +1,12 @@
 package com.bootcamp.demo.controller;
 
-import com.bootcamp.model.Card;
+
+import com.bootcamp.demo.model.Card;
+import org.springframework.stereotype.Component;
+
 import java.util.Calendar;
 
+@Component
 public class CardValidation {
 
     public Boolean isValidCard(Card card){
@@ -10,7 +14,7 @@ public class CardValidation {
                 isValidExpiration(card.getExpirationYear(), card.getExpirationMonth()) && isValidHolderName(card.getHolderName());
     }
 
-    private Boolean isValidExpiration(int year, int month){
+    private Boolean isValidExpiration(long year, long month){
         int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
 
