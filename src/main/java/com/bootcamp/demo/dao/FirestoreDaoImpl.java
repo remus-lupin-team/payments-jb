@@ -1,5 +1,7 @@
 package com.bootcamp.demo.dao;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
 import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Card;
@@ -108,6 +110,24 @@ public class FirestoreDaoImpl implements FirestoreDao {
             LOGGER.error("Failed to add a card", e);
         }
         return cardToReturn;
+    }
+
+    @Override
+    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
+        ApiFuture<DocumentSnapshot> query = firestoreDB.collection(CARDS_COLLECTION).document(cardId).get();
+        Card card;
+        try {
+            DocumentSnapshot document = query.get();
+            if(!document.exists()) {
+                throw new CardNotFoundException("Failed to get card by id " + cardId);
+            }
+            card = mapperToCard.mapDocument2Card(document);
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to get card by id", e);
+            throw new FirestoreDaoException("Failed to get card by id", e);
+        }
+
+        return card;
     }
 
     @Override

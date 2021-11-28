@@ -1,5 +1,7 @@
 package com.bootcamp.demo.dao;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.model.Transaction;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,6 +31,11 @@ public class FirestoreDaoMock implements FirestoreDao {
 
     @Override
     public Card addCard(Card card) {
+        throw new UnsupportedOperationException("firebaseKey not provided");
+    }
+
+    @Override
+    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
         throw new UnsupportedOperationException("firebaseKey not provided");
     }
 

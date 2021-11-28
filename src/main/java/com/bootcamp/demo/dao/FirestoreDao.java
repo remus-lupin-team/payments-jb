@@ -2,6 +2,8 @@ package com.bootcamp.demo.dao;
 
 import java.util.Map;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.model.Transaction;
 
@@ -15,6 +17,8 @@ public interface FirestoreDao {
     List<Card> getAll();
 
     Card addCard(Card card);
+
+    Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException;
 
     Card setPreferredCard(String cardNumber);
 

@@ -1,7 +1,8 @@
 package com.bootcamp.demo.controller;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
 import com.bootcamp.demo.exception.PaymentFailException;
-import com.bootcamp.demo.model.PaymentDetailsDTO;
+import com.bootcamp.demo.model.PaymentRequest;
 import com.bootcamp.demo.model.Transaction;
 import com.bootcamp.demo.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,9 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/test")
-    public Transaction getTestTransaction(){
-        Transaction transaction = new Transaction("1", "123435", 234.43, LocalDateTime.now());
-        return transaction;
-    }
-
     @PostMapping("/pay")
-    public Transaction pay(@RequestBody PaymentDetailsDTO paymentDetails) throws PaymentFailException {
-        return paymentService.simulatePayment(paymentDetails.getCard(), paymentDetails.getAmount());
+    public Transaction pay(@RequestBody PaymentRequest paymentRequest) throws PaymentFailException, CardNotFoundException {
+        return paymentService.processPayment(paymentRequest.getCardId(), paymentRequest.getAmount());
     }
 
 }

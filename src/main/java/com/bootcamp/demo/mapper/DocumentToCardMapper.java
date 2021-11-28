@@ -2,12 +2,12 @@ package com.bootcamp.demo.mapper;
 
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.model.CardStateEnum;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DocumentToCardMapper {
-    public Card mapDocument2Card(QueryDocumentSnapshot document){
+    public Card mapDocument2Card(DocumentSnapshot document) {
         Card card = new Card();
         String holderName = document.getString("holderName");
         card.setHolderName(holderName);
