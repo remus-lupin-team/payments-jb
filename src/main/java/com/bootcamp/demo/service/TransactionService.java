@@ -40,4 +40,9 @@ public class TransactionService {
     public List<Transaction> getTransactionDetails() {
         return repository.getAll();
     }
+
+    public double getAccountStatement(LocalDate startDate, LocalDate endDate){
+        List<Transaction> transactions = repository.filterByDate(startDate, endDate);
+        return transactions.stream().mapToDouble(Transaction::getAmount).sum();
+    }
 }
