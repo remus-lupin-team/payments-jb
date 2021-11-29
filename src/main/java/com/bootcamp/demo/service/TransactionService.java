@@ -6,12 +6,14 @@ import com.bootcamp.demo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("$#.##");
     private final DocumentToTransactionMapper mapper;
     private final TransactionRepository repository;
 
@@ -44,5 +46,9 @@ public class TransactionService {
     public double getAccountStatement(LocalDate startDate, LocalDate endDate){
         List<Transaction> transactions = repository.filterByDate(startDate, endDate);
         return transactions.stream().mapToDouble(Transaction::getAmount).sum();
+    }
+
+    public String getFormattedAccountStatement(LocalDate startDate, LocalDate endDate){
+        return DECIMAL_FORMAT.format(getAccountStatement(startDate, endDate));
     }
 }

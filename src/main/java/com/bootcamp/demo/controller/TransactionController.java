@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -52,19 +53,19 @@ public class TransactionController {
     }
 
     @GetMapping("/total")
-    public double getAccountStatement(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
+    public String getAccountStatement(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
                                       @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate) {
-        return transactionService.getAccountStatement(startDate, endDate);
+        return transactionService.getFormattedAccountStatement(startDate, endDate);
     }
 
     @GetMapping("/total/week")
-    public double getLastWeekAccountStatement() {
-        return transactionService.getAccountStatement(LocalDate.now().minusDays(7), LocalDate.now());
+    public String getLastWeekAccountStatement() {
+        return transactionService.getFormattedAccountStatement(LocalDate.now().minusDays(7), LocalDate.now());
     }
 
     @GetMapping("/total/month")
-    public double getLastMonthAccountStatement() {
-        return transactionService.getAccountStatement(LocalDate.now().minusMonths(1), LocalDate.now());
+    public String getLastMonthAccountStatement() {
+        return transactionService.getFormattedAccountStatement(LocalDate.now().minusMonths(1), LocalDate.now());
     }
 
 }
