@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All cards</title>
+</head>
+<body>
+
+<h1>All cards</h1>
+<div id="cardsList"></div>
+
+<script>
+    let cardsArray = [];
+
+    function drawCardList(cardsArray){
+        let cardsList = document.getElementById("cardsList");
+        let cards = "";
+        cardsArray.forEach((card, index) => {
+            cards += `
+            <div>
+                <span>Card Number:${card.cardNumber}</span>
+                <br>
+                <span>Card Holder: ${card.holderName}</span>
+                <button onclick="removeCard('${card.cardNumber}', ${index})">Remove</button>
+            </div>`
+        });
+        cardsList.innerHTML = cards;
+    }
+    function fetchData() {
+        fetch("/card/getAllCards", {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(response => { cardsArray = response; drawCardList(cardsArray)})
+    }
+
+    function removeCard(cardNumber, index){
+        fetch("/card/"+cardNumber,{
+            method: "DELETE"
+        }).then(response => {
+                cardsArray.splice(index,1);
+                drawCardList(cardsArray);
+        });
+    };
+
+
+    window.addEventListener('DOMContentLoaded', fetchData);
+</script>
+
+</body>
+</html>
