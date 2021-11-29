@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -182,7 +183,7 @@ public class FirestoreDaoImpl implements FirestoreDao {
         Map<String, Object> transactionsData = new HashMap<>();
         transactionsData.put("cardNumber", transaction.getCardNumber());
         transactionsData.put("amount", transaction.getAmount());
-        transactionsData.put("timestamp", transaction.getTimestamp());
+        transactionsData.put("timestamp", transaction.getTimestamp().toEpochSecond(ZoneOffset.UTC));
 
         ApiFuture<WriteResult> document = firestoreDB.collection("transactions").document().set(transactionsData);
         return transaction;

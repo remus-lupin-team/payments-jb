@@ -4,7 +4,9 @@ import com.bootcamp.demo.model.Transaction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 
 
@@ -21,7 +23,8 @@ public class DocumentToTransactionMapper {
         Double amount = document.getDouble("amount");
         transaction.setAmount(amount);
 
-        LocalDateTime timestamp = Objects.requireNonNull(document.getTimestamp("timestamp")).toSqlTimestamp().toLocalDateTime();
+        LocalDateTime timestamp = Instant.ofEpochSecond(Objects.requireNonNull(document.getLong("timestamp")))
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
         transaction.setTimestamp(timestamp);
 
         return transaction;
