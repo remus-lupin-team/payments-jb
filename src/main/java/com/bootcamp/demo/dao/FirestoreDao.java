@@ -10,9 +10,9 @@ import com.bootcamp.demo.model.Transaction;
 import java.util.List;
 
 public interface FirestoreDao {
-    void remove(String id, String collectionName);
+    void remove(String cardNumber, String collectionName);
 
-    void update(String id, String collectionName, Map updateDetails);
+    void update(String cardNumber, String collectionName, Map updateDetails);
 
     List<Card> getAll();
 

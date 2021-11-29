@@ -59,13 +59,33 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public void remove(String id, String collectionName) {
-        firestoreDB.collection(collectionName).document(id).delete();
+    public void remove(String cardNumber, String collectionName) {
+        CollectionReference ref = firestoreDB.collection(collectionName);
+        Query cardNumberQuery = ref.whereEqualTo("cardNumber", cardNumber);
+        ApiFuture<QuerySnapshot> cardNumberQuerySnapshot = cardNumberQuery.get();
+        try {
+            QuerySnapshot querySnapshot = cardNumberQuerySnapshot.get();
+            String documentId = querySnapshot.getDocuments().get(0).getId();
+            firestoreDB.collection(collectionName).document(documentId).delete();
+        }
+        catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to remove card", e);
+        }
     }
 
     @Override
-    public void update(String id, String collectionName, Map cardDetails) {
-        firestoreDB.collection(collectionName).document(id).set(cardDetails);
+    public void update(String cardNumber, String collectionName, Map cardDetails) {
+        CollectionReference ref = firestoreDB.collection(collectionName);
+        Query cardNumberQuery = ref.whereEqualTo("cardNumber", cardNumber);
+        ApiFuture<QuerySnapshot> cardNumberQuerySnapshot = cardNumberQuery.get();
+        try {
+            QuerySnapshot querySnapshot = cardNumberQuerySnapshot.get();
+            String documentId = querySnapshot.getDocuments().get(0).getId();
+            firestoreDB.collection(collectionName).document(documentId).set(cardDetails);
+        }
+        catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to update card", e);
+        }
     }
 
     @Override
