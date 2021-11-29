@@ -36,4 +36,8 @@ public class TransactionService {
     public List<Transaction> filterByDate(LocalDate startDate, LocalDate endDate) {
         return repository.filterByDate(startDate, endDate);
     }
+
+    public List<Transaction> getTransactionDetails() {
+        return repository.getAll();
+    }
 }

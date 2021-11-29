@@ -1,5 +1,7 @@
 package com.bootcamp.demo.dao;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
 import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Card;
@@ -21,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -111,6 +114,24 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
+    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
+        ApiFuture<DocumentSnapshot> query = firestoreDB.collection(CARDS_COLLECTION).document(cardId).get();
+        Card card;
+        try {
+            DocumentSnapshot document = query.get();
+            if(!document.exists()) {
+                throw new CardNotFoundException("Failed to get card by id " + cardId);
+            }
+            card = mapperToCard.mapDocument2Card(document);
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to get card by id", e);
+            throw new FirestoreDaoException("Failed to get card by id", e);
+        }
+
+        return card;
+    }
+
+    @Override
     public Card setPreferredCard(String cardNumber) {
         CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
         Query stateQuery = ref.whereEqualTo("state", CardStateEnum.PREFERRED);
@@ -155,5 +176,16 @@ public class FirestoreDaoImpl implements FirestoreDao {
             e.printStackTrace();
         }
         return objects;
+    }
+
+    @Override
+    public Transaction addTransaction(Transaction transaction) {
+        Map<String, Object> transactionsData = new HashMap<>();
+        transactionsData.put("cardNumber", transaction.getCardNumber());
+        transactionsData.put("amount", transaction.getAmount());
+        transactionsData.put("timestamp", transaction.getTimestamp().toEpochSecond(ZoneOffset.UTC));
+
+        ApiFuture<WriteResult> document = firestoreDB.collection("transactions").document().set(transactionsData);
+        return transaction;
     }
 }
