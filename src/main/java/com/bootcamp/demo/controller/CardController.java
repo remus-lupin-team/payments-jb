@@ -1,5 +1,7 @@
 package com.bootcamp.demo.controller;
 
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.model.Card;
 import com.bootcamp.demo.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,11 @@ public class CardController {
     @GetMapping("/getAllCards")
     public List<Card> getAllCards(){
          return cardService.getAll();
+    }
+
+    @GetMapping(path="{cardNumber}")
+    public Card getCardByCardNumber(@PathVariable String cardNumber) throws FirestoreDaoException, CardNotFoundException {
+        return cardService.getCardByCardNumber(cardNumber);
     }
 
   public @PutMapping(path="{cardNumber}", consumes = APPLICATION_JSON_VALUE)

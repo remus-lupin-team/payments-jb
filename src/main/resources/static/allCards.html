@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>All cards</title>
+    <link rel="stylesheet" href="/public/allCards.css">
 </head>
 <body>
+<div id="cardsContainer">
+    <button id="backButton" onclick="goBack()">Back</button>
+    <h1 id="allCardsHeader">All cards</h1>
+    <div id="cardsList"></div>
+</div>
 
-<h1>All cards</h1>
-<div id="cardsList"></div>
 
 <script>
     let cardsArray = [];
@@ -17,11 +21,13 @@
         let cards = "";
         cardsArray.forEach((card, index) => {
             cards += `
-            <div>
+            <div class="cardContainer">
                 <span>Card Number:${card.cardNumber}</span>
                 <br>
                 <span>Card Holder: ${card.holderName}</span>
+                <br>
                 <button onclick="removeCard('${card.cardNumber}', ${index})">Remove</button>
+                <button onclick="updateCard('${card.cardNumber}')">Update</button>
             </div>`
         });
         cardsList.innerHTML = cards;
@@ -42,6 +48,13 @@
                 drawCardList(cardsArray);
         });
     };
+
+    function updateCard(cardNumber){
+        window.location = "/updateCard.html?cardNumber="+cardNumber;
+    }
+    function goBack(){
+        window.location="/";
+    }
 
 
     window.addEventListener('DOMContentLoaded', fetchData);

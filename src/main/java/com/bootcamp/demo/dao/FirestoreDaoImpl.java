@@ -134,14 +134,20 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
-        ApiFuture<DocumentSnapshot> query = firestoreDB.collection(CARDS_COLLECTION).document(cardId).get();
+    public Card getCardById(String cardNumber) throws FirestoreDaoException, CardNotFoundException {
+        CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
+        Query cardNumberQuery = ref.whereEqualTo("cardNumber", cardNumber);
+        ApiFuture<QuerySnapshot> cardNumberQuerySnapshot = cardNumberQuery.get();
         Card card;
+
         try {
-            DocumentSnapshot document = query.get();
+            QuerySnapshot querySnapshot = cardNumberQuerySnapshot.get();
+            DocumentSnapshot document =  querySnapshot.getDocuments().get(0);
+
             if(!document.exists()) {
-                throw new CardNotFoundException("Failed to get card by id " + cardId);
+                throw new CardNotFoundException("Failed to get card by id " + cardNumber);
             }
+
             card = mapperToCard.mapDocument2Card(document);
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.error("Failed to get card by id", e);

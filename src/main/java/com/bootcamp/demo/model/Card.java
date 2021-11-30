@@ -10,12 +10,13 @@ public class Card {
 
     public Card(){}
 
-    public Card(String holderName, String cardNumber, String cvv, Long expirationYear, Long expirationMonth) {
+    public Card(String holderName, String cardNumber, String CVV, Long expirationYear, Long expirationMonth, CardStateEnum state) {
         this.holderName = holderName;
         this.cardNumber = cardNumber;
-        this.CVV = cvv;
+        this.CVV = CVV;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
+        this.state = state;
     }
 
     public String getHolderName() {

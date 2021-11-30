@@ -1,6 +1,8 @@
 package com.bootcamp.demo.service;
 
 import com.bootcamp.demo.dao.FirestoreDao;
+import com.bootcamp.demo.exception.CardNotFoundException;
+import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.model.Card;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +31,14 @@ public class CardService {
         Map updateDetails = new HashMap();
         updateDetails.put("cardNumber", cardDetails.getCardNumber());
         updateDetails.put("holderName", cardDetails.getHolderName());
-        updateDetails.put("cvv", cardDetails.getCVV());
+        updateDetails.put("CVV", cardDetails.getCVV());
         updateDetails.put("expirationYear", cardDetails.getExpirationYear());
         updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
+        updateDetails.put("state", cardDetails.getState());
         this.firestoreDao.update(id,"cards", updateDetails);
+    }
+    public Card getCardByCardNumber(String cardNumber) throws FirestoreDaoException, CardNotFoundException {
+        return firestoreDao.getCardById(cardNumber);
     }
 
     public Card setPreferredCard(String cardNumber) {
