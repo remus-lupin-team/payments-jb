@@ -1,0 +1,99 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #777;
+    }
+
+    .wrapper {
+        background-color: #222;
+        min-height: 100px;
+        max-width: 800px;
+        margin: 10px auto;
+        padding: 10px 30px;
+    }
+
+    .fa-dollar {
+        padding: 7px 10px;
+        background-color: #444;
+        border-radius: 50%;
+        font-size: 18px;
+        height: 30px;
+        width: 30px;
+        font-weight: 100;
+        color: #28df99
+    }
+
+    .exp-amount {
+        padding-top: 5px;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+
+    .text {
+        color: #bbb;
+    }
+
+    .table-dark {
+        background-color: #222;
+    }
+
+    .table thead th {
+        text-transform: uppercase;
+        color: #bbb;
+        font-size: 12px;
+    }
+
+    .table thead th,
+    .table td,
+    .table th {
+        border: none;
+        overflow: auto auto;
+    }
+</style>
+<body>
+<div class="wrapper rounded">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="col-md-6 text-white mx-3">
+            <h5>Transaction History</h5>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-md-end">
+                <div class="fa fa-money"></div>
+                <div class="text"><span class="fa fa-dollar"></span> Expenses</div>
+                <div class="text-white exp-amount" th:text="${totalExpenses}"></div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-dark table-borderless">
+            <thead>
+            <tr>
+                <th><span class="fa fa-credit-card"></span>Card</th>
+                <th>Date</th>
+                <th class="text-right">Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="transaction : ${transactions}">
+                <tr>
+                    <td th:text="${transaction.cardNumber}"></td>
+                    <td th:text="${transaction.timestamp}"></td>
+                    <td th:text="${transaction.amount}" class="text-right"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

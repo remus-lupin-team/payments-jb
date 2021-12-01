@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
-
 @Component
 public class DocumentToTransactionMapper {
     public Transaction mapDocument2Transaction(QueryDocumentSnapshot document) {
