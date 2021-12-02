@@ -25,4 +25,6 @@ public interface FirestoreDao {
     List<Transaction> getAllTransactions();
 
     Transaction addTransaction(Transaction transaction);
+
+    String getPreferredCardId();
 }

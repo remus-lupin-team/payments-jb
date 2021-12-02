@@ -53,4 +53,9 @@ public class FirestoreDaoMock implements FirestoreDao {
     public Transaction addTransaction(Transaction transaction) {
         throw new UnsupportedOperationException("firebaseKey not provided");
     }
+
+    @Override
+    public String getPreferredCardId() {
+        throw new UnsupportedOperationException("firebaseKey not provided");
+    }
 }

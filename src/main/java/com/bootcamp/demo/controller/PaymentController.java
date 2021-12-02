@@ -8,8 +8,6 @@ import com.bootcamp.demo.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
@@ -26,4 +24,8 @@ public class PaymentController {
         return paymentService.processPayment(paymentRequest.getCardId(), paymentRequest.getAmount());
     }
 
+    @PostMapping("/pay-with-preferred-card")
+    public Transaction payWithPreferredCard(@RequestBody Double amount){
+        return paymentService.processPaymentWithPreferredCard(amount);
+    }
 }
