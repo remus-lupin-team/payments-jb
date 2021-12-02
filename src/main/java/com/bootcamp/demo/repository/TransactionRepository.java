@@ -3,68 +3,34 @@ package com.bootcamp.demo.repository;
 import com.bootcamp.demo.dao.FirestoreDao;
 import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Transaction;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Repository
 public class TransactionRepository {
-    List<Transaction> list;
-    //    private Firestore firestore;
-    DocumentToTransactionMapper mapper;
+
     private final FirestoreDao firestoreDao;
-
-    public TransactionRepository(List<Transaction> list, FirestoreDao firestoreDao, DocumentToTransactionMapper mapper) {
-        this.list = list;
-        this.firestoreDao = firestoreDao;
-        this.mapper = mapper;
-
-    }
+    private final DocumentToTransactionMapper mapper;
 
     @Autowired
-    public TransactionRepository(DocumentToTransactionMapper mapper, FirestoreDao firestoreDao) {
-        this.mapper = mapper;
+    public TransactionRepository(FirestoreDao firestoreDao, DocumentToTransactionMapper mapper) {
         this.firestoreDao = firestoreDao;
-        list = new ArrayList<Transaction>();
-        getFromDB();
+        this.mapper = mapper;
+
     }
 
     public List<Transaction> getAll() {
-        return list;
+        return firestoreDao.getAllTransactions();
     }
 
-    public void getFromDB() {
-        list = firestoreDao.getAllTransactions();
-//        firestore = FirestoreClient.getFirestore();
-//        ApiFuture<QuerySnapshot> query = firestore.collection("transactions").get();
-//        List<Transaction> transactions = new ArrayList<>();
-//        try{
-//            QuerySnapshot querySnapshot= query.get();
-//            List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-//            for(QueryDocumentSnapshot document : documents){
-//                Transaction transaction = mapper.mapDocument2Transaction(document);
-//                transactions.add(transaction);
-//            }
-//        }catch (InterruptedException | ExecutionException e){
-//            e.printStackTrace();
-//        }
-//        list = transactions;
-    }
-
-    public List<Transaction> filterByAmount(Double minAmount, Double maxAmount){
-//        List<Transaction> list = repository.getAll();
-        if(maxAmount == null){
+    public List<Transaction> filterByAmount(Double minAmount, Double maxAmount) {
+        List<Transaction> list = firestoreDao.getAllTransactions();
+        if (maxAmount == null) {
             maxAmount = list.stream()
                     .max(Comparator.comparing(Transaction::getAmount))
                     .get()
@@ -76,16 +42,16 @@ public class TransactionRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<Transaction> filterByCardNr(String cardNr){
-//        List<Transaction> list = repository.getAll();
+    public List<Transaction> filterByCardNr(String cardNr) {
+        List<Transaction> list = firestoreDao.getAllTransactions();
         return list.stream()
                 .filter(e -> e.getCardNumber().equals(cardNr))
                 .collect(Collectors.toList());
     }
 
-    public List<Transaction> filterByDate(LocalDate startDate, LocalDate endDate){
-//        List<Transaction> list = repository.getAll();
-        if(endDate == null){
+    public List<Transaction> filterByDate(LocalDate startDate, LocalDate endDate) {
+        List<Transaction> list = firestoreDao.getAllTransactions();
+        if (endDate == null) {
             endDate = LocalDate.now();
         }
         LocalDate finalEndDate = endDate;
