@@ -1,4 +1,4 @@
-package com.bootcamp.demo.controller;
+package com.bootcamp.demo.Controller;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
