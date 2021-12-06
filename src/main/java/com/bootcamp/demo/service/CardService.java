@@ -19,15 +19,15 @@ public class CardService {
     public CardService(FirestoreDao firestoreDao) {
         this.firestoreDao = firestoreDao;
     }
-    public void removeCard(String id){
-        this.firestoreDao.remove(id, "cards");
+    public void removeCard(String cardNumber){
+        this.firestoreDao.removeCard(cardNumber);
     }
 
     public List<Card> getAll() {
         return firestoreDao.getAll();
     }
 
-    public void updateCard(String id, Card cardDetails){
+    public void updateCard(String cardNumber, Card cardDetails){
         Map updateDetails = new HashMap();
         updateDetails.put("cardNumber", cardDetails.getCardNumber());
         updateDetails.put("holderName", cardDetails.getHolderName());
@@ -35,7 +35,7 @@ public class CardService {
         updateDetails.put("expirationYear", cardDetails.getExpirationYear());
         updateDetails.put("expirationMonth", cardDetails.getExpirationMonth());
         updateDetails.put("state", cardDetails.getState());
-        this.firestoreDao.update(id,"cards", updateDetails);
+        this.firestoreDao.updateCard(cardNumber, updateDetails);
     }
     public Card getCardByCardNumber(String cardNumber) throws FirestoreDaoException, CardNotFoundException {
         return firestoreDao.getCardById(cardNumber);
