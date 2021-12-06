@@ -15,12 +15,12 @@ import java.util.Map;
 public class FirestoreDaoMock implements FirestoreDao {
 
     @Override
-    public void remove(String id, String collectionName) {
+    public void removeCard(String id) {
         throw new UnsupportedOperationException("firebaseKey not provided");
     }
 
     @Override
-    public void update(String id, String collectionName, Map updateDetails) {
+    public void updateCard(String id, Map updateDetails) {
         throw new UnsupportedOperationException("firebaseKey not provided");
     }
 
@@ -35,7 +35,7 @@ public class FirestoreDaoMock implements FirestoreDao {
     }
 
     @Override
-    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
+    public Card getCardById(String cardId) {
         throw new UnsupportedOperationException("firebaseKey not provided");
     }
 

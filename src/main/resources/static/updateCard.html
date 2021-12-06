@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Update card details</title>
+</head>
+<body>
+<div style="text-align: center;" id="cardData">
+
+</div>
+<script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const initialCardNumber = urlParams.get("cardNumber");
+    let card;
+    function drawCardDetails(card){
+        if(card){
+            const cardData = document.getElementById("cardData");
+            let cardDetails = `<div style="text-align:right; width:280px; margin:auto;">
+                           <h1>Update card details:</h1>
+                           <form>
+                           <label for="cardNumber">Card number:</label>
+                           <input maxlength="19" id="cardNumber" name="cardNumber" type="text" value="${card.cardNumber}"/>
+                           <br/>
+                           <br/>
+                           <label for="holderName">Card holder name:</label>
+                           <input id="holderName" name="holderName" type="text" value="${card.holderName}"/>
+                           <br/>
+                           <br/>
+                           <label for="expirationMonth">Expiration month:</label>
+                           <input maxlength="2" id="expirationMonth" name="expirationMonth" type="text" value="${card.expirationMonth}"/>
+                           <br/>
+                           <br/>
+                           <label for="expirationYear">Expiration year:</label>
+                           <input maxlength="4" id="expirationYear" name="expirationYear" type="text" value="${card.expirationYear}"/>
+                           <br/>
+                           <br/>
+                           <label for="CVV">CVV:</label>
+                           <input maxlength="3" id="CVV" name="CVV" type="text" value="${card.cvv}"/>
+                           <br/>
+                           <br/>
+                           <button onclick="cancel(event)">Cancel</button>
+                           <button onclick="updateCard(event)">Update details</button>
+                        </form></div>`;
+            cardData.innerHTML = cardDetails;
+        }
+    }
+
+    function fetchData() {
+        fetch("/card/"+initialCardNumber, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(response => { card = response; console.log(card); drawCardDetails(card);});
+    }
+    window.addEventListener('DOMContentLoaded', fetchData);
+
+    function cancel(event){
+        event.preventDefault();
+        window.location = "/allCards.html";
+    }
+
+    function updateCard(event){
+        event.preventDefault();
+        let cardNumber = document.getElementById("cardNumber").value.trim();
+        let holderName = document.getElementById("holderName").value.trim();
+        let expirationMonth = document.getElementById("expirationMonth").value.trim();
+        let expirationYear = document.getElementById("expirationYear").value.trim();
+        let CVV = document.getElementById("CVV").value;
+
+        if(cardNumber == "" || holderName == "" || expirationYear == "" || expirationMonth == "" || CVV == ""){
+            alert("You have empty fields, please fill in all the required data.");
+            return;
+        }
+
+        let updateDetails = {
+            "cardNumber": cardNumber,
+            "holderName":holderName,
+            "expirationMonth":expirationMonth,
+            "expirationYear":expirationYear,
+            "cvv":CVV,
+            "state":card.state
+        }
+        fetch("/card/" + initialCardNumber,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(updateDetails)
+            })
+            .then(response => response.json())
+            .then(res => window.location = "/allCards.html")
+            .catch(e => console.log(e))
+    }
+</script>
+
+</body>
+</html>
