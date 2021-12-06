@@ -2,10 +2,13 @@ package com.bootcamp.demo.controller;
 
 import com.bootcamp.demo.model.Transaction;
 import com.bootcamp.demo.service.TransactionService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,4 +51,21 @@ public class TransactionController {
     public List<Transaction> getTransactionDetails() {
         return transactionService.getTransactionDetails();
     }
+
+    @GetMapping("/total")
+    public String getAccountStatement(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
+                                      @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate) {
+        return transactionService.getFormattedAccountStatement(startDate, endDate);
+    }
+
+    @GetMapping("/total/week")
+    public String getLastWeekAccountStatement() {
+        return transactionService.getFormattedAccountStatement(LocalDate.now().minusDays(7), LocalDate.now());
+    }
+
+    @GetMapping("/total/month")
+    public String getLastMonthAccountStatement() {
+        return transactionService.getFormattedAccountStatement(LocalDate.now().minusMonths(1), LocalDate.now());
+    }
+
 }
