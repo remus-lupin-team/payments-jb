@@ -1,7 +1,5 @@
 package com.bootcamp.demo.dao;
 
-import com.bootcamp.demo.exception.CardNotFoundException;
-import com.bootcamp.demo.exception.FirestoreDaoException;
 import com.bootcamp.demo.mapper.DocumentToCardMapper;
 import com.bootcamp.demo.mapper.DocumentToTransactionMapper;
 import com.bootcamp.demo.model.Card;
@@ -59,13 +57,30 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public void remove(String id, String collectionName) {
-        firestoreDB.collection(collectionName).document(id).delete();
+    public void removeCard(String cardNumber) {
+            String documentId = this.getCardNumberDocumentID(cardNumber);
+            firestoreDB.collection(CARDS_COLLECTION).document(documentId).delete();
     }
 
     @Override
-    public void update(String id, String collectionName, Map cardDetails) {
-        firestoreDB.collection(collectionName).document(id).set(cardDetails);
+    public void updateCard(String cardNumber, Map cardDetails) {
+            String documentId = this.getCardNumberDocumentID(cardNumber);
+            firestoreDB.collection(CARDS_COLLECTION).document(documentId).set(cardDetails);
+    }
+
+    private String getCardNumberDocumentID(String cardNumber){
+        CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
+        Query cardNumberQuery = ref.whereEqualTo("cardNumber", cardNumber);
+        ApiFuture<QuerySnapshot> cardNumberQuerySnapshot = cardNumberQuery.get();
+        String documentId = "";
+        try {
+            QuerySnapshot querySnapshot = cardNumberQuerySnapshot.get();
+            documentId = querySnapshot.getDocuments().get(0).getId();
+        }
+        catch(ExecutionException | InterruptedException e) {
+            LOGGER.error("Card not found");
+        }
+        return documentId;
     }
 
     @Override
@@ -114,21 +129,18 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException {
-        ApiFuture<DocumentSnapshot> query = firestoreDB.collection(CARDS_COLLECTION).document(cardId).get();
-        Card card;
-        try {
-            DocumentSnapshot document = query.get();
-            if(!document.exists()) {
-                throw new CardNotFoundException("Failed to get card by id " + cardId);
-            }
-            card = mapperToCard.mapDocument2Card(document);
-        } catch (InterruptedException | ExecutionException e) {
-            LOGGER.error("Failed to get card by id", e);
-            throw new FirestoreDaoException("Failed to get card by id", e);
-        }
-
-        return card;
+    public Card getCardById(String cardNumber) {
+       String documentId = this.getCardNumberDocumentID(cardNumber);
+       ApiFuture<DocumentSnapshot> documentSnapshotApiFuture = firestoreDB.collection(CARDS_COLLECTION).document(documentId).get();
+       Card card = new Card();
+       try {
+           DocumentSnapshot documentSnapshot = documentSnapshotApiFuture.get();
+           card = mapperToCard.mapDocument2Card(documentSnapshot);
+       }
+       catch(InterruptedException | ExecutionException e){
+           LOGGER.error("Card not found");
+       }
+       return card;
     }
 
     @Override

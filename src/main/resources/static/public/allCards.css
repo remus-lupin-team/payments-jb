@@ -1,0 +1,24 @@
+span {
+    margin-bottom: 7px;
+    display: inline-block;
+}
+
+.cardContainer {
+    padding: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+#allCardsHeader {
+    text-align:center;
+    display:inline-block;
+}
+
+#cardsContainer {
+    width: 250px;
+    margin: auto;
+}
+
+#backButton {
+    vertical-align: super;
+}
