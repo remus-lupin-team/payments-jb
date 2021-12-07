@@ -9,6 +9,14 @@
 <h1>Transaction History</h1>
 <ul id="transactionsList"></ul>
 
+<div id="amountFiltering" style="border: 5px solid chartreuse">
+    <label for="minAmount">Minimum amount</label>
+    <input type="number" id="minAmount">
+    <label for="maxAmount">Maximum amount</label>
+    <input type="number" id="maxAmount">
+    <button type="button" onclick="filterByAmount()">Filter by amount</button>
+</div>
+
 <script>
     let transactionsList = document.getElementById("transactionsList");
     let transactionsFromResponse;
@@ -31,7 +39,10 @@
     }
 
     async function filterByAmount() {
-        await fetch("/history/amount", {
+        let min = document.getElementById("minAmount").value;
+        let max = document.getElementById("minAmount").value;
+        let request = '/history/amount?minAmount=' + min + '&maxAmount=' + max
+        await fetch(request, {
             method: "GET"
         })
             .then(response => response.json())

@@ -28,7 +28,7 @@ public class TransactionController {
 
     @GetMapping("/amount")
     public List<Transaction> filterByAmount(double minAmount, double maxAmount) {
-        System.out.println(transactionService.filterByAmount(minAmount, maxAmount));
+//        System.out.println(transactionService.filterByAmount(minAmount, maxAmount));
         return transactionService.filterByAmount(minAmount, maxAmount);
     }
 

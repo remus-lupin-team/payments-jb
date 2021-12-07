@@ -50,7 +50,8 @@ public class FirestoreDaoImpl implements FirestoreDao {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();
-        FirebaseApp.initializeApp(options);
+        if (FirebaseApp.getApps().size() == 0)
+            FirebaseApp.initializeApp(options);
 
         firestoreDB = FirestoreClient.getFirestore();
     }

@@ -21,30 +21,30 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @DeleteMapping(path="{id}")
-   public ResponseEntity<String> removeCard(@PathVariable String id){
-      this.cardService.removeCard(id);
-      return new ResponseEntity<>(id, HttpStatus.OK);
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<String> removeCard(@PathVariable String id) {
+        this.cardService.removeCard(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @GetMapping("/getAllCards")
-    public List<Card> getAllCards(){
-         return cardService.getAll();
+    public List<Card> getAllCards() {
+        return cardService.getAll();
     }
 
-  public @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails){
+    public @PutMapping(path = "{id}", consumes = APPLICATION_JSON_VALUE)
+    ResponseEntity<String> updateCard(@PathVariable String id, @RequestBody Card cardDetails) {
         this.cardService.updateCard(id, cardDetails);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @PostMapping("/addCard")
-    ResponseEntity<Object> addCard(@RequestBody Card card){
+    ResponseEntity<Object> addCard(@RequestBody Card card) {
         return new ResponseEntity<>(cardService.addCard(card), HttpStatus.OK);
     }
 
     @PutMapping("/preferredCard")
-    ResponseEntity<Object> setPreferredCard(@RequestParam String cardNumber){
+    ResponseEntity<Object> setPreferredCard(@RequestParam String cardNumber) {
         return new ResponseEntity<>(cardService.setPreferredCard(cardNumber), HttpStatus.OK);
     }
 }
