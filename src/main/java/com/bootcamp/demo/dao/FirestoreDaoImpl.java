@@ -185,7 +185,7 @@ public class FirestoreDaoImpl implements FirestoreDao {
 
             }
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to add a transaction", e);
         }
         return objects;
     }
@@ -199,5 +199,24 @@ public class FirestoreDaoImpl implements FirestoreDao {
 
         ApiFuture<WriteResult> document = firestoreDB.collection("transactions").document().set(transactionsData);
         return transaction;
+    }
+
+    @Override
+    public String getPreferredCardId() {
+        CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
+        Query stateQuery = ref.whereEqualTo("state", CardStateEnum.PREFERRED);
+        ApiFuture<QuerySnapshot> stateQuerySnapshot = stateQuery.get();
+        String cardId = "";
+        try {
+            if(stateQuerySnapshot.get().isEmpty()){
+                LOGGER.error("No preferred card set");
+                return "";
+            }
+            cardId = stateQuerySnapshot.get().getDocuments().get(0).getId();
+
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("No preferred card set");
+        }
+        return cardId;
     }
 }
