@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+<html xmlns:th="http://www.thymeleaf.org">
+-->
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Card</title>
+</head>
+<body>
+<div>
+
+
+    <div align="center">
+        <h2 >Please enter your card data</h2>
+        <br>
+
+        <form id="Form">
+            <label id="labelForcardNumber" for="cardNumber" title="16 digits without any space">Card number: </label>
+
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Card number"  required/>
+            <br>
+            <br>
+
+            <label id="labelForholderName" for="holderName" title="At least 5 characters">Holder name: </label>
+            <input type="text" id="holderName" name="holderName" placeholder="Holder name" required/>
+            <br>
+            <br>
+
+            <label id="labelForcvv" for="cvv" title="3 or 4 digits without any space">CVV: </label>
+            <input type="text" id="cvv" name="cvv" placeholder="CVV"  required/>
+            <br>
+            <br>
+
+            <label id="labelForexpirationYear" for="expirationYear">Expiration year: </label>
+            <input type="text" id="expirationYear" name="expirationYear" placeholder="Expiration year" required/>
+            <br>
+            <br>
+
+            <label id="labelForexpirationMonth" for="expirationMonth">Expiration month: </label>
+            <input type="text" id="expirationMonth" name="expirationMonth" placeholder="Expiration month" required/>
+            <br>
+            <br>
+
+            <input onclick="sendForm()" class="submit" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+    function sendForm() {
+        let account = {
+            cardNumber: document.getElementById("cardNumber").value,
+            holderName: document.getElementById("holderName").value,
+            cvv: document.getElementById("cvv").value,
+            expirationYear: document.getElementById("expirationYear").value,
+            expirationMonth: document.getElementById("expirationMonth").value
+    };
+
+    fetch("/card/addCard", {
+            body: JSON.stringify(account),
+            method: "POST",
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+    .then(response => response.json())
+    .then(response => console.log("post-> ", response));
+    }
+    </script>
+
+</div>
+</body>
+</html>
