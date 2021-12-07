@@ -9,6 +9,20 @@
 <h1>Transaction History</h1>
 <ul id="transactionsList"></ul>
 
+<div id="amountFiltering" style="border: 5px solid chartreuse">
+    <label for="minAmount">Minimum amount</label>
+    <input type="number" id="minAmount">
+    <label for="maxAmount">Maximum amount</label>
+    <input type="number" id="maxAmount">
+    <button type="button" onclick="filterByAmount()">Filter by amount</button>
+</div>
+
+<div id="cardFiltering" style="border: 5px solid blueviolet">
+    <label for="cardNumber">Card number</label>
+    <input type="number" id="cardNumber">
+    <button type="button" onclick="filterByCard()">Filter by card</button>
+</div>
+
 <script>
     let transactionsList = document.getElementById("transactionsList");
     let transactionsFromResponse;
@@ -31,18 +45,46 @@
     }
 
     async function filterByAmount() {
-        await fetch("/history/amount", {
+        let min = document.getElementById("minAmount").value;
+        let max = document.getElementById("maxAmount").value;
+        let request = '/history/amount?minAmount=' + min + '&maxAmount=' + max
+        await fetch(request, {
             method: "GET"
         })
             .then(response => response.json())
             .then(response => transactionsFromResponse = response)
 
+        while (transactionsList.firstChild)
+            transactionsList.removeChild(transactionsList.firstChild);
+
         transactionsFromResponse.forEach(transaction => {
             let li = document.createElement("li");
-            li.innerText = transaction.id + ' '
-                + transaction.cardNumber + ' '
-                + transaction.amount + ' '
-                + transaction.timeStamp;
+            li.innerText = 'id: ' + transaction.id +
+                '   \n\tcard number: ' + transaction.cardNumber +
+                '   \n\tamount: ' + transaction.amount +
+                '   \n\ttime stamp: ' + transaction.timeStamp;
+            transactionsList.append(li);
+        })
+    }
+
+    async function filterByCard() {
+        let card = document.getElementById("cardNumber").value;
+        let request = '/history/card?cardNr=' + card
+        await fetch(request, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(response => transactionsFromResponse = response)
+
+        while (transactionsList.firstChild)
+            transactionsList.removeChild(transactionsList.firstChild);
+
+        transactionsFromResponse.forEach(transaction => {
+            let li = document.createElement("li");
+            li.innerText = 'id: ' + transaction.id +
+                '   \n\tcard number: ' + transaction.cardNumber +
+                '   \n\tamount: ' + transaction.amount +
+                '   \n\ttime stamp: ' + transaction.timeStamp;
             transactionsList.append(li);
         })
     }
