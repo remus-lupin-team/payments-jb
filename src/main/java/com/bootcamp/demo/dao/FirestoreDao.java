@@ -18,7 +18,7 @@ public interface FirestoreDao {
 
     Card addCard(Card card);
 
-    Card getCardById(String cardId) throws FirestoreDaoException, CardNotFoundException;
+    Card getCardByCardNumber(String cardNumber) throws FirestoreDaoException, CardNotFoundException;
 
     Card setPreferredCard(String cardNumber);
 
