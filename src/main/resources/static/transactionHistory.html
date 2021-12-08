@@ -6,6 +6,7 @@
 </head>
 <body>
 
+<button id="backButton" onclick="goBack()">Back</button>
 <h1>Transaction History</h1>
 <ul id="transactionsList"></ul>
 
@@ -21,12 +22,14 @@
             .then(response => transactionsFromResponse = response)
 
         transactionsFromResponse.forEach(transaction => {
+            let br = document.createElement("br");
             let li = document.createElement("li");
             li.innerText = 'id: ' + transaction.id +
                 '   \n\tcard number: ' + transaction.cardNumber +
                 '   \n\tamount: ' + transaction.amount +
-                '   \n\ttime stamp: ' + transaction.timeStamp;
+                '   \n\ttimestamp: ' + transaction.timestamp;
             transactionsList.append(li);
+            transactionsList.append(br);
         })
     }
 
@@ -38,15 +41,21 @@
             .then(response => transactionsFromResponse = response)
 
         transactionsFromResponse.forEach(transaction => {
+            let br = document.createElement("br");
             let li = document.createElement("li");
-            li.innerText = transaction.id + ' '
-                + transaction.cardNumber + ' '
-                + transaction.amount + ' '
-                + transaction.timeStamp;
+            li.innerText = 'id: ' + transaction.id +
+                '   \n\tcard number: ' + transaction.cardNumber +
+                '   \n\tamount: ' + transaction.amount +
+                '   \n\ttimestamp: ' + transaction.timestamp;
             transactionsList.append(li);
+            transactionsList.append(br);
         })
     }
 
+    function goBack(){
+        window.location="/";
+    }
+    
     window.addEventListener('DOMContentLoaded', fetchData);
 </script>
 
