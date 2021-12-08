@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Statement</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+
+</head>
+<body>
+
+<div align="center">
+    <button id="backButton" onclick="goBack()">Back</button>
+    <h1>Account Statement</h1>
+    <br/>
+    <div id="amountFiltering">
+        <label for="startDate">Start Date</label>
+        <input id="startDate" type="text" class="hasDatepicker" autocomplete="off" placeholder="dd-mm-yyyy">
+        <label for="endDate">End Date</label>
+        <input id="endDate" type="text" class="hasDatepicker" autocomplete="off" placeholder="dd-mm-yyyy">
+        <br/>
+        <button type="button" onclick="getAccountStatementByDate()">Retrieve account statement</button>
+    </div>
+
+    <br/>
+
+    <div id="cardFiltering">
+        <button type="button" onclick="getLastWeek()">Last Week</button>
+        <button type="button" onclick="getLastMonth()">Last Month</button>
+    </div>
+
+    <br/>
+
+    <div id="accountStatement"></div>
+</div>
+
+
+<script>
+    let dateformat = 'dd-mm-yyyy';
+
+    $('.hasDatepicker').datepicker({
+        format: dateformat,
+        autoclose: true
+    });
+
+    let accountStatement = document.getElementById("accountStatement");
+    let accountStatementResponse;
+
+    async function getAccountStatementByDate() {
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        let request = '/history/total?startDate=' + startDate + '&endDate=' + endDate
+        await fetch(request, {
+            method: "GET"
+        })
+            .then(response => response.text())
+            .then(response => accountStatementResponse = response)
+
+        accountStatement.innerText = 'Total expenses: ' + accountStatementResponse.valueOf();
+    }
+
+    async function getLastWeek() {
+        let request = '/history/total/week'
+        await fetch(request, {
+            method: "GET"
+        })
+            .then(response => response.text())
+            .then(response => accountStatementResponse = response)
+
+        accountStatement.innerText = 'Total expenses: ' + accountStatementResponse.valueOf();
+    }
+
+    async function getLastMonth() {
+        let request = '/history/total/month'
+        await fetch(request, {
+            method: "GET"
+        })
+            .then(response => response.text())
+            .then(response => accountStatementResponse = response)
+
+        accountStatement.innerText = 'Total expenses: ' + accountStatementResponse.valueOf();
+    }
+
+    function goBack(){
+        window.location="/";
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchData);
+</script>
+
+</body>
+</html>
