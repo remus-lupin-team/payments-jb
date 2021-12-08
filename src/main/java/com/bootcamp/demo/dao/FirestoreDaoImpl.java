@@ -202,21 +202,21 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public String getPreferredCardId() {
+    public String getPreferredCardNumber() {
         CollectionReference ref = firestoreDB.collection(CARDS_COLLECTION);
         Query stateQuery = ref.whereEqualTo("state", CardStateEnum.PREFERRED);
         ApiFuture<QuerySnapshot> stateQuerySnapshot = stateQuery.get();
-        String cardId = "";
+        String cardNumber = "";
         try {
             if(stateQuerySnapshot.get().isEmpty()){
                 LOGGER.error("No preferred card set");
                 return "";
             }
-            cardId = stateQuerySnapshot.get().getDocuments().get(0).getId();
+            cardNumber = stateQuerySnapshot.get().getDocuments().get(0).getString("cardNumber");
 
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.error("No preferred card set");
         }
-        return cardId;
+        return cardNumber;
     }
 }
