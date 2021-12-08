@@ -37,16 +37,16 @@ public class PaymentService {
 
     public Transaction processPaymentWithPreferredCard(Double amount){
         Transaction transaction = new Transaction();
-        String cardId = getCardIdOfPreferredCard();
+        String cardNumberOfPreferredCard = getCardNumberOfPreferredCard();
         try {
-            transaction = processPayment(cardId, amount);
+            transaction = processPayment(cardNumberOfPreferredCard, amount);
         } catch (PaymentFailException | CardNotFoundException e) {
-            LOGGER.error("Failed to get preferred card by id " + cardId, e);
+            LOGGER.error("Failed to get preferred card by id " + cardNumberOfPreferredCard, e);
         }
         return transaction;
     }
 
-    private String getCardIdOfPreferredCard(){
-        return firestoreDao.getPreferredCardId();
+    private String getCardNumberOfPreferredCard(){
+        return firestoreDao.getPreferredCardNumber();
     }
 }
