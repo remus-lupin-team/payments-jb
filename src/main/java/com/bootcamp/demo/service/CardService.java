@@ -38,7 +38,7 @@ public class CardService {
         this.firestoreDao.updateCard(cardNumber, updateDetails);
     }
     public Card getCardByCardNumber(String cardNumber) throws FirestoreDaoException, CardNotFoundException {
-        return firestoreDao.getCardById(cardNumber);
+        return firestoreDao.getCardByCardNumber(cardNumber);
     }
 
     public Card setPreferredCard(String cardNumber) {

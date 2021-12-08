@@ -13,7 +13,7 @@ import java.util.Objects;
 public class DocumentToTransactionMapper {
     public Transaction mapDocument2Transaction(QueryDocumentSnapshot document) {
         Transaction transaction = new Transaction();
-        String id = document.getString("id");
+        String id = document.getId();
         transaction.setId(id);
 
         String cardNumber = document.getString("cardNumber");

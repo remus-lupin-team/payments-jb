@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payment</title>
+</head>
+<body>
+<div>
+    <div align="center">
+        <button id="backButton" onclick="goBack()">Back</button>
+        <h2>Enter Payment Information</h2>
+        <br>
+
+        <form id="Form">
+            <label id="labelCardNumber" for="cardNumber" title="16 digits without any space">Card number: </label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Card number" required/>
+            <br>
+            <br>
+
+            <label id="labelAmount" for="amount" title="At least 5 characters">Amount: </label>
+            <input type="text" id="amount" name="amount" placeholder="$0.00" required/>
+            <br>
+            <br>
+
+            <input onclick="sendForm()" class="submit" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        function sendForm() {
+            let paymentRequest = {
+                cardNumber: document.getElementById("cardNumber").value,
+                amount: document.getElementById("amount").value
+            };
+
+            fetch("/payment/pay", {
+                body: JSON.stringify(paymentRequest),
+                method: "POST",
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+                .then(response => response.json())
+                .then(response => console.log("post-> ", response));
+        }
+
+        function goBack(){
+            window.location="/";
+        }
+    </script>
+
+</div>
+</body>
