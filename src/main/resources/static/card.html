@@ -9,7 +9,7 @@
 </head>
 <body>
 <div>
-
+    <button id="backButton" onclick="goBack()">Back</button>
 
     <div align="center">
         <h2 >Please enter your card data</h2>
@@ -63,7 +63,11 @@
     })
     .then(response => response.json())
     .then(response => console.log("post-> ", response));
-    }
+    };
+
+    function goBack(){
+        window.location="/";
+    };
     </script>
 
 </div>
