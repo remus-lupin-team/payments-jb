@@ -24,12 +24,12 @@ public class PaymentService {
         this.firestoreDao = firestoreDao;
     }
 
-    public Transaction processPayment(String cardId, Double amount) throws PaymentFailException, CardNotFoundException {
+    public Transaction processPayment(String cardNumber, Double amount) throws PaymentFailException, CardNotFoundException {
         Card card;
         try {
-            card = firestoreDao.getCardById(cardId);
+            card = firestoreDao.getCardByCardNumber(cardNumber);
         } catch (FirestoreDaoException e) {
-            throw new PaymentFailException("Failed to get card by id " + cardId, e);
+            throw new PaymentFailException("Failed to get card with number " + cardNumber, e);
         }
         Transaction transaction = new Transaction(UUID.randomUUID().toString(), card.getCardNumber(), amount, LocalDateTime.now());
         return firestoreDao.addTransaction(transaction);

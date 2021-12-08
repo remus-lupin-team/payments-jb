@@ -129,7 +129,7 @@ public class FirestoreDaoImpl implements FirestoreDao {
     }
 
     @Override
-    public Card getCardById(String cardNumber) {
+    public Card getCardByCardNumber(String cardNumber) {
        String documentId = this.getCardNumberDocumentID(cardNumber);
        ApiFuture<DocumentSnapshot> documentSnapshotApiFuture = firestoreDB.collection(CARDS_COLLECTION).document(documentId).get();
        Card card = new Card();

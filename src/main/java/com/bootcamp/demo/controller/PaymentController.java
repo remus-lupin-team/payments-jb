@@ -21,7 +21,7 @@ public class PaymentController {
 
     @PostMapping("/pay")
     public Transaction pay(@RequestBody PaymentRequest paymentRequest) throws PaymentFailException, CardNotFoundException {
-        return paymentService.processPayment(paymentRequest.getCardId(), paymentRequest.getAmount());
+        return paymentService.processPayment(paymentRequest.getCardNumber(), paymentRequest.getAmount());
     }
 
     @PostMapping("/pay-with-preferred-card")
