@@ -6,6 +6,7 @@
 </head>
 <body>
 
+<button id="backButton" onclick="goBack()">Back</button>
 <h1>Transaction History</h1>
 <ul id="transactionsList"></ul>
 
@@ -89,6 +90,10 @@
         })
     }
 
+    function goBack(){
+        window.location="/";
+    }
+    
     window.addEventListener('DOMContentLoaded', fetchData);
 </script>
 
